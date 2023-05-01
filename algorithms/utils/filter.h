@@ -1,5 +1,5 @@
 // provides filter structs, is probably more extensible than manually implementing the different kinds of filers but also probably slower
-
+// upon further reflection, discrete filters will be much more cache efficent if they're stored as part of a tvec_point object
 #include <unordered_set>
 #include "parlay/parallel.h"
 #include "parlay/primitives.h"
