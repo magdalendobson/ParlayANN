@@ -11,11 +11,15 @@ struct Filter {
 
 // filter that returns true for all indices
 struct NoFilter : public Filter {
+    static NoFilter* instance;
+
     bool filter(int index) { return true; }
     parlay::sequence<bool> filter(parlay::sequence<int> indices) {
         return parlay::sequence<bool>(indices.size(), true);
     }
 };
+
+NoFilter* NoFilter::instance = new NoFilter();
 
 // filter that returns true for indices in the given set
 struct SetFilter : public Filter {
@@ -37,7 +41,7 @@ struct RangeFilter : public Filter {
     }
 };
 
-// filter that returns true if either of the given filters return true
+/* // filter that returns true if either of the given filters return true
 // naturally can be used recursively to combine more than two filters
 // might lend itself to a par_do if filters are sufficiently expensive and/or numerous
 struct OrFilter : public Filter {
@@ -48,7 +52,7 @@ struct OrFilter : public Filter {
     parlay::sequence<bool> filter(parlay::sequence<int> indices) {
         parlay::sequence<bool> f1_res = f1->filter(indices);
         parlay::sequence<bool> f2_res = f2->filter(indices);
-        return parlay::map_index(f1_res, [&] (size_t i, bool b) { return b || f2_res[i]; });
+        return parlay::map(f1_res, [&] (size_t i, bool b) { return b || f2_res[i]; });
     }
 };
 
@@ -63,6 +67,7 @@ struct AndFilter : public Filter {
     parlay::sequence<bool> filter(parlay::sequence<int> indices) {
         parlay::sequence<bool> f1_res = f1->filter(indices);
         parlay::sequence<bool> f2_res = f2->filter(indices);
-        return parlay::map_index(f1_res, [&] (size_t i, bool b) { return b && f2_res[i]; });
+        return parlay::map(f1_res, [&] (size_t i, bool b) { return b && f2_res[i]; });
     }
 };
+ */
